@@ -44,6 +44,7 @@ To use this application, you'll need to:
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+
 ## Acknowledgments
 
 - Thanks to [football-data.org](https://www.football-data.org/) for providing the API

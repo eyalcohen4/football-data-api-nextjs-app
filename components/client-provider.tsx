@@ -1,7 +1,15 @@
 "use client";
 
 import { datadogRum } from "@datadog/browser-rum";
-import { CoralogixRum } from "@coralogix/browser";
+import {
+  ConsoleSpanExporter,
+  SimpleSpanProcessor,
+  WebTracerProvider,
+} from "@opentelemetry/sdk-trace-web";
+import { DocumentLoad } from "@opentelemetry/plugin-document-load";
+import { ZoneContextManager } from "@opentelemetry/context-zone";
+import { registerInstrumentations } from "@opentelemetry/instrumentation";
+
 import * as Sentry from "@sentry/react";
 
 import { useEffect } from "react";
@@ -22,6 +30,21 @@ export const ClientProvider = () => {
       sessionReplaySampleRate: 20,
       defaultPrivacyLevel: "mask-user-input",
     });
+
+
+        const provider = new WebTracerProvider({
+          spanProcessors: [new SimpleSpanProcessor(new ConsoleSpanExporter())],
+        });
+
+        provider.register({
+          // Changing default contextManager to use ZoneContextManager - supports asynchronous operations - optional
+          contextManager: new ZoneContextManager(),
+        });
+
+        // Registering instrumentations / plugins
+        registerInstrumentations({
+          instrumentations: [new DocumentLoad()],
+        });
 
 
     Sentry.init({

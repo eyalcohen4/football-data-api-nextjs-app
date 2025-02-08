@@ -35,8 +35,8 @@ export default function RootLayout({
               Middleware.track({
                 serviceName: "Soccer App",
                 projectName: "Soccer App",
-                accountKey: "${process.env.middlewareAccountKey}",
-                target: "https://${process.env.middlewareDomain}.middleware.io",
+                accountKey: "${process.env.MIDDLEWARE_ACCOUNT_KEY}",
+                target: "https://${process.env.MIDDLEWARE_DOMAIN}.middleware.io",
                 defaultAttributes: {
                   "app.version": "1.0.0",
                 },

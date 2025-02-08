@@ -1,20 +1,10 @@
 "use client";
 
 import { datadogRum } from "@datadog/browser-rum";
-import {
-  SimpleSpanProcessor,
-  WebTracerProvider
-} from "@opentelemetry/sdk-trace-web";
-import { ZoneContextManager } from "@opentelemetry/context-zone";
-import { registerInstrumentations } from "@opentelemetry/instrumentation";
 
 import * as Sentry from "@sentry/react";
 
-const {
-  getWebAutoInstrumentations,
-} = require("@opentelemetry/auto-instrumentations-web");
-const { CollectorTraceExporter } = require("@opentelemetry/exporter-collector");
-const { B3Propagator } = require("@opentelemetry/propagator-b3");
+
 
 import { useEffect } from "react";
 
@@ -35,27 +25,6 @@ export const ClientProvider = () => {
       defaultPrivacyLevel: "mask-user-input",
     });
 
-    const exporter = new CollectorTraceExporter({
-      serviceName: "auto-instrumentations-web",
-    });
-
-    const provider = new WebTracerProvider();
-    provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
-    provider.register({
-      contextManager: new ZoneContextManager(),
-      propagator: new B3Propagator(),
-    });
-
-    registerInstrumentations({
-      instrumentations: [
-        getWebAutoInstrumentations({
-          // load custom configuration for xml-http-request instrumentation
-          "@opentelemetry/instrumentation-xml-http-request": {
-            clearTimingResources: true,
-          },
-        }),
-      ],
-    });
 
     Sentry.init({
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
